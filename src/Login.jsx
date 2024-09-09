@@ -64,6 +64,11 @@ class Login extends Component {
             {message}
           </label>
         )}
+
+        {/* Rodapé com nome e turma */}
+        <footer className="footer">
+          Nome: Thiago Aifelder Manfron
+        </footer>
       </div>
     );
   }

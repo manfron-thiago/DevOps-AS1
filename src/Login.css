@@ -58,14 +58,26 @@ button:hover {
 
 /* Estilo da mensagem de sucesso */
 .success {
-  color: #4CAF50;
-  border-color: #4CAF50;
+  color: blue;
+  border-color: blue;
   background-color: #e0f7e0;
 }
 
 /* Estilo da mensagem de erro */
 .error {
-  color: #ff0000;
-  border-color: #ff0000;
+  color: blueviolet;
+  border-color: blueviolet;
   background-color: #fde2e2;
+}
+
+/* Estilo do rodapé */
+.footer {
+  font-size: 14px;
+  color: #777;
+  text-align: center;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: 10px 0;
 }
