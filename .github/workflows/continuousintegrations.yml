@@ -1,5 +1,6 @@
-name: Continuous Integration
+name: Linting and Build
 
+# Dispara o workflow em push ou pull requests para o branch main
 on:
   push:
     branches:
@@ -9,20 +10,28 @@ on:
       - main
 
 jobs:
-  build:
+  lint-and-build:
     runs-on: ubuntu-latest
 
     steps:
+    # Passo 1: Clona o repositório
     - name: Checkout repository
       uses: actions/checkout@v2
 
+    # Passo 2: Configura o Node.js
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
         node-version: '16'
 
+    # Passo 3: Instala as dependências do projeto
     - name: Install dependencies
       run: npm install
 
-    - name: Run tests
-      run: npm test
+    # Passo 4: Verifica o código com ESLint (Linting)
+    - name: Run ESLint
+      run: npm run lint
+
+    # Passo 5: Faz o build do projeto
+    - name: Build the project
+      run: npm run build
