@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import './Login.css';
 
 // Componente de Login utilizando Class Component

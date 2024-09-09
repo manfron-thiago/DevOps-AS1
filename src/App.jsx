@@ -1,4 +1,3 @@
-import React from 'react';
 import Login from './Login'; // Importa o componente Login
 
 // Componente principal da aplicação
