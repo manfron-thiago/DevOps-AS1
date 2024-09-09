@@ -35,6 +35,14 @@ export default [
         'warn',
         { allowConstantExport: true },
       ],
+      'no-unused-vars': [
+        'error',
+        {
+          vars: 'all',
+          args: 'none',
+          ignoreRestSiblings: true,
+        },
+      ],
     },
   },
 ];
