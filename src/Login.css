@@ -69,15 +69,3 @@ button:hover {
   border-color: #ff0000;
   background-color: #fde2e2;
 }
-
-/* Estilo do rodapé */
-.footer {
-  font-size: 14px;
-  color: #777;
-  text-align: center;
-  width: 100%;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  padding: 10px 0;
-}
