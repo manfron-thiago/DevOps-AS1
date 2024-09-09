@@ -1,0 +1,83 @@
+/* Estilo global para html e body */
+html, body {
+  height: 100%; /* Garante que a altura ocupe toda a janela */
+  margin: 0;    /* Remove a margem padrão */
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh; /* Garante que o contêiner ocupe toda a altura da janela */
+  background-color: #f0f0f0;
+  font-family: Arial, sans-serif;
+  position: relative; /* Permite que o rodapé seja posicionado corretamente */
+}
+
+h1 {
+  color: #333;
+  margin-bottom: 20px; /* Espaçamento abaixo do título */
+}
+
+input {
+  width: 300px;        /* Largura dos campos de input */
+  padding: 10px;       /* Espaçamento interno dos campos de input */
+  margin: 10px 0;      /* Margem entre os campos de input */
+  border: 1px solid #ccc; /* Borda dos campos de input */
+  border-radius: 5px; /* Bordas arredondadas dos campos de input */
+  font-size: 16px;     /* Tamanho da fonte dentro dos campos de input */
+}
+
+button {
+  width: 320px;        /* Largura do botão */
+  padding: 10px;       /* Espaçamento interno do botão */
+  background-color: #4CAF50; /* Cor de fundo do botão */
+  color: white;        /* Cor do texto do botão */
+  border: none;        /* Remove a borda padrão do botão */
+  border-radius: 5px; /* Bordas arredondadas do botão */
+  font-size: 16px;     /* Tamanho da fonte do botão */
+  cursor: pointer;     /* Cursor de ponteiro ao passar o mouse sobre o botão */
+}
+
+button:hover {
+  background-color: #45a049; /* Cor de fundo do botão ao passar o mouse */
+}
+
+/* Estilo da mensagem de validação */
+.message {
+  margin-top: 20px;
+  font-size: 18px;
+  font-weight: bold;
+  border: 1px solid;
+  padding: 10px;
+  border-radius: 5px;
+  width: 320px;
+  text-align: center;
+}
+
+/* Estilo da mensagem de sucesso */
+.success {
+  color: #4CAF50;
+  border-color: #4CAF50;
+  background-color: #e0f7e0;
+}
+
+/* Estilo da mensagem de erro */
+.error {
+  color: #ff0000;
+  border-color: #ff0000;
+  background-color: #fde2e2;
+}
+
+/* Estilo do rodapé */
+.footer {
+  font-size: 14px;
+  color: #777;
+  text-align: center;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: 10px 0;
+}
