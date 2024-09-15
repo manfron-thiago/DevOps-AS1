@@ -1,4 +1,4 @@
-name: Deploy React App to GitHub Pages
+name: CD Workflow
 
 # O deploy será acionado quando houver push na branch `main`
 on:
@@ -29,9 +29,9 @@ jobs:
       - name: Build project
         run: npm run build
 
-      # Deploy para GitHub Pages
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      # Upload do build como artefato
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }} # Token automático do GitHub
-          publish_dir: ./dist # Pasta onde o build será salvo
+          name: react-build
+          path: ./dist
