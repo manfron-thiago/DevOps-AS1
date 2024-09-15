@@ -1,36 +1,37 @@
-name: Deploy to GitHub Pages
+name: Deploy React App to GitHub Pages
 
+# O deploy será acionado quando houver push na branch `main`
 on:
   push:
     branches:
       - main
 
 jobs:
-  deploy:
+  build-deploy:
     runs-on: ubuntu-latest
 
     steps:
-    # Passo 1: Checkout do repositório
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      # Checkout do código
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    # Passo 2: Configura o Node.js (versão mais recente)
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '18'
+      # Configuração do Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
 
-    # Passo 3: Instala as dependências
-    - name: Install dependencies
-      run: npm install
+      # Instalação das dependências
+      - name: Install dependencies
+        run: npm install
 
-    # Passo 4: Faz o build do projeto
-    - name: Build the project
-      run: npm run build
+      # Build do projeto
+      - name: Build project
+        run: npm run build
 
-    # Passo 5: Deploy para o GitHub Pages
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./build
+      # Deploy para GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }} # Token automático do GitHub
+          publish_dir: ./dist # Pasta onde o build será salvo

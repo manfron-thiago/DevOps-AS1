@@ -1,36 +1,34 @@
-name: Deploy to GitHub Pages
+name: CI Workflow
 
+# Executa o workflow sempre que houver pull request na branch principal
 on:
-  push:
-    branches:
-      - main
+  pull_request:
+    branches: [main]
 
+# Define o ambiente onde o workflow será executado
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-    # Passo 1: Checkout do repositório
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      # Checkout do código no repositório
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    # Passo 2: Configura o Node.js (versão mais recente)
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '18'
+      # Configuração da versão do Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
 
-    # Passo 3: Instala as dependências
-    - name: Install dependencies
-      run: npm install
+      # Instalação das dependências do projeto
+      - name: Install dependencies
+        run: npm install
 
-    # Passo 4: Faz o build do projeto
-    - name: Build the project
-      run: npm run build
+      # Rodando o linting para verificar a qualidade do código
+      - name: Run Linting
+        run: npm run lint
 
-    # Passo 5: Deploy para o GitHub Pages
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./build
+      # Build do projeto para garantir que não haja erros de compilação
+      - name: Build project
+        run: npm run build
