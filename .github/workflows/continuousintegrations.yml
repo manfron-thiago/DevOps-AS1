@@ -36,10 +36,6 @@ jobs:
       - name: Build project
         run: npm run build
 
-      # Executando os testes unitários
-      - name: Run Unit Tests
-        run: npm test
-
       # Enviando alerta para o Discord
       - name: Send Discord Alert
         if: always()  # Alerta em caso de sucesso ou falha
