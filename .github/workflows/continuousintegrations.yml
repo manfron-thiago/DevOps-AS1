@@ -43,23 +43,26 @@ jobs:
         if: always()  # Alerta em caso de sucesso ou falha
         run: |
           # Mensagens personalizadas
-          MESSAGE="CI Workflow Executado!\n"
+          MESSAGE=""
 
-          # Verificando se o linting foi bem-sucedido
-          if [[ "${{ steps.linting.outcome }}" == "success" ]]; then
-            MESSAGE+="Linting realizado com sucesso! 🎉\n"
-          else
-            MESSAGE+="Erro no linting! ❌\n"
+          # Verificando se o linting foi bem-sucedido (envia mensagem apenas se NÃO for merge de PR)
+          if [[ "${{ github.event_name }}" != "pull_request" ]]; then
+            MESSAGE+="CI Workflow Executado!\n"
+            if [[ "${{ steps.linting.outcome }}" == "success" ]]; then
+              MESSAGE+="Linting realizado com sucesso! 🎉\n"
+            else
+              MESSAGE+="Erro no linting! ❌\n"
+            fi
+
+            # Verificando se o build foi bem-sucedido
+            if [[ "${{ steps.build.outcome }}" == "success" ]]; then
+              MESSAGE+="Build realizado com sucesso! 🎉\n"
+            else
+              MESSAGE+="Erro no build! ❌\n"
+            fi
           fi
 
-          # Verificando se o build foi bem-sucedido
-          if [[ "${{ steps.build.outcome }}" == "success" ]]; then
-            MESSAGE+="Build realizado com sucesso! 🎉\n"
-          else
-            MESSAGE+="Erro no build! ❌\n"
-          fi
-
-          # Mensagem adicional para informar que o processo foi iniciado
+          # Mensagem adicional para informar que o processo foi iniciado (em caso de merge ou commit)
           if [[ "${{ github.event_name }}" == "pull_request" ]] && [[ "${{ github.event.action }}" == "closed" ]] && [[ "${{ github.event.pull_request.merged }}" == "true" ]]; then
             MESSAGE+="Processo iniciado por um merge de pull request na branch principal. 📝\n"
           elif [[ "${{ github.event_name }}" == "push" ]]; then
@@ -67,4 +70,6 @@ jobs:
           fi
 
           # Enviando a mensagem para o Discord
-          curl -H "Content-Type: application/json" -X POST -d "{\"content\": \"$MESSAGE\"}" https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
+          if [[ ! -z "$MESSAGE" ]]; then
+            curl -H "Content-Type: application/json" -X POST -d "{\"content\": \"$MESSAGE\"}" https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
+          fi
