@@ -38,17 +38,6 @@ jobs:
         id: build
         run: npm run build
 
-      # Validando se o delivery.yml rodou sem erros
-      - name: Check Delivery Workflow
-        id: check_delivery
-        run: |
-          echo "Checking delivery workflow..."
-          # Adicione aqui a lógica para verificar se o CD foi bem-sucedido
-          # Exemplo:
-          # if [[ $(some_command_to_check_delivery_status) != "success" ]]; then
-          #   echo "Delivery workflow failed!" && exit 1
-          # fi
-
       # Enviando alertas para o Discord
       - name: Send Discord Alert
         if: always()  # Alerta em caso de sucesso ou falha
@@ -75,13 +64,6 @@ jobs:
             MESSAGE+="Processo iniciado por um commit na branch principal. 📝\n"
           elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
             MESSAGE+="Processo iniciado por um merge de pull request na branch principal. 📝\n"
-          fi
-
-          # Mensagem sobre o CD Workflow
-          if [[ "${{ steps.check_delivery.outcome }}" == "success" ]]; then
-            MESSAGE+="CD Workflow concluído sem erros! 🎉\n"
-          else
-            MESSAGE+="CD Workflow encontrado com erros! ❌\n"
           fi
 
           # Enviando a mensagem para o Discord
