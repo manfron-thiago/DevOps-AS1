@@ -30,12 +30,12 @@ jobs:
 
       # Rodando o linting para verificar a qualidade do código
       - name: Run Linting
-        id: linting  # Adicionando um ID para referenciar depois
+        id: linting
         run: npm run lint
 
       # Build do projeto para garantir que não haja erros de compilação
       - name: Build project
-        id: build  # Adicionando um ID para referenciar depois
+        id: build
         run: npm run build
 
       # Validando se o delivery.yml rodou sem erros
@@ -43,7 +43,7 @@ jobs:
         id: check_delivery
         run: |
           echo "Checking delivery workflow..."
-          # Aqui, você pode verificar os logs ou status da execução anterior conforme necessário.
+          # Adicione aqui a lógica para verificar se o CD foi bem-sucedido
           # Exemplo:
           # if [[ $(some_command_to_check_delivery_status) != "success" ]]; then
           #   echo "Delivery workflow failed!" && exit 1
