@@ -1,13 +1,11 @@
 name: CI Workflow
 
-# Executa o workflow a cada commit ou quando houver um merge na branch main
+# Executa o workflow em push e pull request na branch main
 on:
   push:
-    branches:
-      - main
+    branches: [main]  # Executa o workflow para cada commit na branch main
   pull_request:
-    branches:
-      - main
+    branches: [main]  # Executa o workflow quando há pull requests na branch main
 
 jobs:
   build:
@@ -17,6 +15,11 @@ jobs:
       # Checkout do código no repositório
       - name: Checkout code
         uses: actions/checkout@v3
+
+      # Envia alerta de início do processo de build
+      - name: Send Discord Alert (Iniciando build)
+        run: |
+          curl -H "Content-Type: application/json" -X POST -d '{"content": "🔨 Iniciando o processo de build..."}' https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
 
       # Configuração da versão do Node.js
       - name: Setup Node.js
@@ -28,48 +31,31 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      # Envia alerta quando as dependências forem instaladas
+      - name: Send Discord Alert (Dependências instaladas)
+        run: |
+          curl -H "Content-Type: application/json" -X POST -d '{"content": "📦 Dependências instaladas com sucesso!"}' https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
+
       # Rodando o linting para verificar a qualidade do código
       - name: Run Linting
-        id: linting
         run: npm run lint
+
+      # Envia alerta quando o linting for concluído
+      - name: Send Discord Alert (Linting concluído)
+        run: |
+          curl -H "Content-Type: application/json" -X POST -d '{"content": "✅ Linting concluído! O código está limpo."}' https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
 
       # Build do projeto para garantir que não haja erros de compilação
       - name: Build project
-        id: build
         run: npm run build
 
-      # Enviando alertas para o Discord
-      - name: Send Discord Alert
-        if: always()  # Alerta em caso de sucesso ou falha
+      # Envia alerta quando o build for concluído
+      - name: Send Discord Alert (Build concluído)
         run: |
-          # Mensagens personalizadas
-          MESSAGE=""
+          curl -H "Content-Type: application/json" -X POST -d '{"content": "🚀 Build concluído com sucesso!"}' https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
 
-          # Verificando se o linting foi bem-sucedido (envia mensagem apenas se NÃO for merge de PR)
-          if [[ "${{ github.event_name }}" != "pull_request" ]]; then
-            MESSAGE+="CI Workflow Executado!\n"
-            if [[ "${{ steps.linting.outcome }}" == "success" ]]; then
-              MESSAGE+="Linting realizado com sucesso! 🎉\n"
-            else
-              MESSAGE+="Erro no linting! ❌\n"
-            fi
-
-            # Verificando se o build foi bem-sucedido
-            if [[ "${{ steps.build.outcome }}" == "success" ]]; then
-              MESSAGE+="Build realizado com sucesso! 🎉\n"
-            else
-              MESSAGE+="Erro no build! ❌\n"
-            fi
-          fi
-
-          # Mensagem adicional para informar que o processo foi iniciado (em caso de merge ou commit)
-          if [[ "${{ github.event_name }}" == "pull_request" ]] && [[ "${{ github.event.action }}" == "closed" ]] && [[ "${{ github.event.pull_request.merged }}" == "true" ]]; then
-            MESSAGE+="Processo iniciado por um merge de pull request na branch principal. 📝\n"
-          elif [[ "${{ github.event_name }}" == "push" ]]; then
-            MESSAGE+="Processo iniciado por um commit na branch principal. 📝\n"
-          fi
-
-          # Enviando a mensagem para o Discord
-          if [[ ! -z "$MESSAGE" ]]; then
-            curl -H "Content-Type: application/json" -X POST -d "{\"content\": \"$MESSAGE\"}" https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
-          fi
+      # Envia alerta específico quando houver um merge na branch main
+      - name: Send Discord Alert (Merge na branch main)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          curl -H "Content-Type: application/json" -X POST -d '{"content": "🔀 Merge realizado na branch main!"}' https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
