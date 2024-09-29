@@ -1,9 +1,13 @@
 name: CI Workflow
 
-# Executa o workflow sempre que houver pull request na branch principal
+# Executa o workflow a cada commit ou quando houver um merge na branch main
 on:
+  push:
+    branches:
+      - main
   pull_request:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   build:
@@ -31,7 +35,7 @@ jobs:
       # Build do projeto para garantir que não haja erros de compilação
       - name: Build project
         run: npm run build
-        
+
       # Enviando alerta para o Discord
       - name: Send Discord Alert
         if: always()  # Alerta em caso de sucesso ou falha
