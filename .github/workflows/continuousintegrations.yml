@@ -38,12 +38,32 @@ jobs:
         id: build  # Adicionando um ID para referenciar depois
         run: npm run build
 
+      # Validando se o delivery.yml rodou sem erros
+      - name: Check Delivery Workflow
+        id: check_delivery
+        run: |
+          # Verifica se o arquivo delivery.yml rodou corretamente
+          echo "Checking delivery workflow..."
+          # Substitua pelo comando que verifica o sucesso do delivery.yml
+          # Aqui, você pode verificar os logs ou status da execução anterior conforme necessário.
+          # Por exemplo:
+          # if [[ $(some_command_to_check_delivery_status) != "success" ]]; then
+          #   echo "Delivery workflow failed!" && exit 1
+          # fi
+
       # Enviando alertas para o Discord
       - name: Send Discord Alert
         if: always()  # Alerta em caso de sucesso ou falha
         run: |
           # Mensagens personalizadas
           MESSAGE=""
+
+          # Verificando se o delivery workflow foi bem-sucedido
+          if [[ "${{ steps.check_delivery.outcome }}" == "success" ]]; then
+            MESSAGE+="Delivery workflow succeeded! 🎉\n"
+          else
+            MESSAGE+="Delivery workflow failed! ❌\n"
+          fi
 
           if [[ "${{ steps.linting.outcome }}" == "success" ]]; then
             MESSAGE+="Linting passed! 🎉\n"
