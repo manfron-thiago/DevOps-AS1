@@ -30,14 +30,39 @@ jobs:
 
       # Rodando o linting para verificar a qualidade do código
       - name: Run Linting
+        id: linting  # Adicionando um ID para referenciar depois
         run: npm run lint
 
       # Build do projeto para garantir que não haja erros de compilação
       - name: Build project
+        id: build  # Adicionando um ID para referenciar depois
         run: npm run build
 
-      # Enviando alerta para o Discord
+      # Enviando alertas para o Discord
       - name: Send Discord Alert
         if: always()  # Alerta em caso de sucesso ou falha
         run: |
-          curl -H "Content-Type: application/json" -X POST -d '{"content": "Build and tests completed!"}' https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
+          # Mensagens personalizadas
+          MESSAGE=""
+
+          if [[ "${{ steps.linting.outcome }}" == "success" ]]; then
+            MESSAGE+="Linting passed! 🎉\n"
+          else
+            MESSAGE+="Linting failed! ❌\n"
+          fi
+
+          if [[ "${{ steps.build.outcome }}" == "success" ]]; then
+            MESSAGE+="Build succeeded! 🎉\n"
+          else
+            MESSAGE+="Build failed! ❌\n"
+          fi
+
+          # Mensagem adicional para informar que o processo foi iniciado
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            MESSAGE+="Process initiated by a commit to the main branch. 📝\n"
+          elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            MESSAGE+="Process initiated by a pull request merge to the main branch. 📝\n"
+          fi
+
+          # Enviando a mensagem para o Discord
+          curl -H "Content-Type: application/json" -X POST -d "{\"content\": \"$MESSAGE\"}" https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
