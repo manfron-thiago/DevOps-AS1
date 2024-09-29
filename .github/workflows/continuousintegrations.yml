@@ -60,10 +60,10 @@ jobs:
           fi
 
           # Mensagem adicional para informar que o processo foi iniciado
-          if [[ "${{ github.event_name }}" == "push" ]]; then
-            MESSAGE+="Processo iniciado por um commit na branch principal. 📝\n"
-          elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
+          if [[ "${{ github.event_name }}" == "pull_request" ]] && [[ "${{ github.event.action }}" == "closed" ]] && [[ "${{ github.event.pull_request.merged }}" == "true" ]]; then
             MESSAGE+="Processo iniciado por um merge de pull request na branch principal. 📝\n"
+          elif [[ "${{ github.event_name }}" == "push" ]]; then
+            MESSAGE+="Processo iniciado por um commit na branch principal. 📝\n"
           fi
 
           # Enviando a mensagem para o Discord
