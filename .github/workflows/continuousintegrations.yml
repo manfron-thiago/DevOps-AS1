@@ -5,7 +5,6 @@ on:
   pull_request:
     branches: [main]
 
-# Define o ambiente onde o workflow será executado
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -32,3 +31,13 @@ jobs:
       # Build do projeto para garantir que não haja erros de compilação
       - name: Build project
         run: npm run build
+
+      # Executando os testes unitários
+      - name: Run Unit Tests
+        run: npm test
+
+      # Enviando alerta para o Discord
+      - name: Send Discord Alert
+        if: always()  # Alerta em caso de sucesso ou falha
+        run: |
+          curl -H "Content-Type: application/json" -X POST -d '{"content": "Build and tests completed!"}' https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
