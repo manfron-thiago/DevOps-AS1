@@ -42,11 +42,9 @@ jobs:
       - name: Check Delivery Workflow
         id: check_delivery
         run: |
-          # Verifica se o arquivo delivery.yml rodou corretamente
           echo "Checking delivery workflow..."
-          # Substitua pelo comando que verifica o sucesso do delivery.yml
           # Aqui, você pode verificar os logs ou status da execução anterior conforme necessário.
-          # Por exemplo:
+          # Exemplo:
           # if [[ $(some_command_to_check_delivery_status) != "success" ]]; then
           #   echo "Delivery workflow failed!" && exit 1
           # fi
@@ -56,32 +54,34 @@ jobs:
         if: always()  # Alerta em caso de sucesso ou falha
         run: |
           # Mensagens personalizadas
-          MESSAGE=""
+          MESSAGE="CI Workflow Executado!\n"
 
-          # Verificando se o delivery workflow foi bem-sucedido
-          if [[ "${{ steps.check_delivery.outcome }}" == "success" ]]; then
-            MESSAGE+="Delivery workflow succeeded! 🎉\n"
-          else
-            MESSAGE+="Delivery workflow failed! ❌\n"
-          fi
-
+          # Verificando se o linting foi bem-sucedido
           if [[ "${{ steps.linting.outcome }}" == "success" ]]; then
-            MESSAGE+="Linting passed! 🎉\n"
+            MESSAGE+="Linting realizado com sucesso! 🎉\n"
           else
-            MESSAGE+="Linting failed! ❌\n"
+            MESSAGE+="Erro no linting! ❌\n"
           fi
 
+          # Verificando se o build foi bem-sucedido
           if [[ "${{ steps.build.outcome }}" == "success" ]]; then
-            MESSAGE+="Build succeeded! 🎉\n"
+            MESSAGE+="Build realizado com sucesso! 🎉\n"
           else
-            MESSAGE+="Build failed! ❌\n"
+            MESSAGE+="Erro no build! ❌\n"
           fi
 
           # Mensagem adicional para informar que o processo foi iniciado
           if [[ "${{ github.event_name }}" == "push" ]]; then
-            MESSAGE+="Process initiated by a commit to the main branch. 📝\n"
+            MESSAGE+="Processo iniciado por um commit na branch principal. 📝\n"
           elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            MESSAGE+="Process initiated by a pull request merge to the main branch. 📝\n"
+            MESSAGE+="Processo iniciado por um merge de pull request na branch principal. 📝\n"
+          fi
+
+          # Mensagem sobre o CD Workflow
+          if [[ "${{ steps.check_delivery.outcome }}" == "success" ]]; then
+            MESSAGE+="CD Workflow concluído sem erros! 🎉\n"
+          else
+            MESSAGE+="CD Workflow encontrado com erros! ❌\n"
           fi
 
           # Enviando a mensagem para o Discord
