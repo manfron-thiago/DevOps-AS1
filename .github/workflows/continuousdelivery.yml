@@ -28,24 +28,12 @@ jobs:
       - name: Build project
         run: npm run build
 
-      # Criar um arquivo simples de teste diretamente no workflow
-      - name: Create test file
-        run: |
-          echo "Este é um arquivo de teste criado diretamente pelo GitHub Actions." > test-file.txt
-
       # Fazer o upload do build como artefato
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v3
         with:
           name: react-build
           path: ./dist
-
-      # Fazer o upload do arquivo de teste como artefato
-      - name: Upload Test File
-        uses: actions/upload-artifact@v3
-        with:
-          name: test-file
-          path: ./test-file.txt
 
       # Enviar alerta ao Discord para sucesso do CD
       - name: Send Discord Alert (CD Build Sucesso)
