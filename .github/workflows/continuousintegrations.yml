@@ -16,30 +16,30 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Verifica se é um merge na branch main
-      - name: Check if it's a merge
-        id: check_merge
+      # Enviar mensagem de início ao Discord
+      - name: Send Start Message to Discord
         run: |
-          if [[ "${{ github.event_name }}" == "pull_request" && "${{ github.event.action }}" == "closed" && "${{ github.event.pull_request.merged }}" == "true" ]]; then
-            echo "::set-output name=merge::true"
-          else
-            echo "::set-output name=merge::false"
-          fi
+          curl -H "Content-Type: application/json" -X POST -d '{"content": "🔨 CI: Iniciando o processo de build..."}' https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
 
-      # Passo para instalar dependências e construir o projeto, mas sem enviar alertas durante o merge
+      # Instalação das dependências
       - name: Install dependencies
-        if: steps.check_merge.outputs.merge == 'false'
-        run: npm install
+        run: |
+          npm install
+          curl -H "Content-Type: application/json" -X POST -d '{"content": "📦 CI: Dependências instaladas com sucesso!"}' https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
 
+      # Executar linting
       - name: Run Linting
-        if: steps.check_merge.outputs.merge == 'false'
-        run: npm run lint
+        run: |
+          npm run lint
+          curl -H "Content-Type: application/json" -X POST -d '{"content": "✅ CI: Linting concluído! O código está limpo."}' https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
 
+      # Build do projeto
       - name: Build project
-        if: steps.check_merge.outputs.merge == 'false'
-        run: npm run build
+        run: |
+          npm run build
+          curl -H "Content-Type: application/json" -X POST -d '{"content": "🚀 CI: Build concluído com sucesso!"}' https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
 
-      # Este passo é para indicar que um merge foi realizado, mas não envia alertas
+      # Mensagem de merge realizado
       - name: No alert on merge
-        if: steps.check_merge.outputs.merge == 'true'
+        if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
         run: echo "Merge realizado, não enviaremos alertas de CI."
