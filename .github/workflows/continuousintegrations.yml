@@ -43,4 +43,3 @@ jobs:
       - name: No alert on merge
         if: steps.check_merge.outputs.merge == 'true'
         run: echo "Merge realizado, não enviaremos alertas de CI."
-
