@@ -31,11 +31,14 @@ jobs:
           npm run lint
           curl -H "Content-Type: application/json" -X POST -d '{"content": "✅ CI: Linting concluído! O código está limpo."}' https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
 
-      # Executar testes unitários
-      - name: Run Tests
+      # Executar testes unitários individuais
+      - name: Run Unit Tests
         run: |
-          npm test -- --watchAll=false
-          curl -H "Content-Type: application/json" -X POST -d '{"content": "🧪 CI: Testes executados com sucesso!"}' https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
+          for i in {1..5}; do
+            npm test -- -t "Test $i" -- --watchAll=false && \
+            curl -H "Content-Type: application/json" -X POST -d "{\"content\": \"🧪 CI: Teste $i executado com sucesso!\"}" https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl || \
+            curl -H "Content-Type: application/json" -X POST -d "{\"content\": \"❌ CI: Teste $i falhou!\"}" https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
+          done
 
       # Build do projeto
       - name: Build project
