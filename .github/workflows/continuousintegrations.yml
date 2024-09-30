@@ -16,46 +16,57 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Envia alerta de início do processo de build
+      # Verifica se é um merge na branch main
+      - name: Check if it's a merge
+        id: check_merge
+        run: |
+          if [[ "${{ github.event.pull_request.merged }}" == "true" ]]; then
+            echo "::set-output name=merge::true"
+          else
+            echo "::set-output name=merge::false"
+          fi
+
+      # Só envia alertas e executa processos se não for um merge
       - name: Send Discord Alert (Iniciando build)
+        if: steps.check_merge.outputs.merge == 'false'
         run: |
           curl -H "Content-Type: application/json" -X POST -d '{"content": "🔨 Iniciando o processo de build..."}' https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
 
-      # Configuração da versão do Node.js
       - name: Setup Node.js
+        if: steps.check_merge.outputs.merge == 'false'
         uses: actions/setup-node@v3
         with:
           node-version: 18
 
-      # Instalação das dependências do projeto
       - name: Install dependencies
+        if: steps.check_merge.outputs.merge == 'false'
         run: npm install
 
-      # Envia alerta quando as dependências forem instaladas
       - name: Send Discord Alert (Dependências instaladas)
+        if: steps.check_merge.outputs.merge == 'false'
         run: |
           curl -H "Content-Type: application/json" -X POST -d '{"content": "📦 Dependências instaladas com sucesso!"}' https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
 
-      # Rodando o linting para verificar a qualidade do código
       - name: Run Linting
+        if: steps.check_merge.outputs.merge == 'false'
         run: npm run lint
 
-      # Envia alerta quando o linting for concluído
       - name: Send Discord Alert (Linting concluído)
+        if: steps.check_merge.outputs.merge == 'false'
         run: |
           curl -H "Content-Type: application/json" -X POST -d '{"content": "✅ Linting concluído! O código está limpo."}' https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
 
-      # Build do projeto para garantir que não haja erros de compilação
       - name: Build project
+        if: steps.check_merge.outputs.merge == 'false'
         run: npm run build
 
-      # Envia alerta quando o build for concluído
       - name: Send Discord Alert (Build concluído)
+        if: steps.check_merge.outputs.merge == 'false'
         run: |
           curl -H "Content-Type: application/json" -X POST -d '{"content": "🚀 Build concluído com sucesso!"}' https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
 
       # Envia alerta específico quando houver um merge na branch main
       - name: Send Discord Alert (Merge na branch main)
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: steps.check_merge.outputs.merge == 'true'
         run: |
           curl -H "Content-Type: application/json" -X POST -d '{"content": "🔀 Merge realizado na branch main!"}' https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
