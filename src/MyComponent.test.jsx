@@ -1,7 +1,11 @@
-import { render, screen } from '@testing-library/react';
-import MyComponent from './MyComponent';
+/* global test, expect */
 
-test('renders MyComponent', () => {
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import MyComponent from './MyComponent'; // Ajuste o caminho conforme necessário
+
+test('renders MyComponent correctly', () => {
   render(<MyComponent />);
-  expect(screen.getByText(/MyComponent text/i)).toBeInTheDocument();
+  const element = screen.getByText(/Texto esperado/i); // Substitua pelo texto que você espera encontrar
+  expect(element).toBeInTheDocument();
 });

@@ -6,8 +6,7 @@
   },
   "extends": [
     "eslint:recommended",
-    "plugin:react/recommended",
-    "plugin:jest/recommended"
+    "plugin:react/recommended"
   ],
   "parserOptions": {
     "ecmaFeatures": {
@@ -17,15 +16,10 @@
     "sourceType": "module"
   },
   "plugins": [
-    "react",
-    "jest"
+    "react"
   ],
   "rules": {
     "react/react-in-jsx-scope": "off",
     "constructor-super": "off"
-  },
-  "globals": {
-    "test": "readonly",
-    "expect": "readonly"
   }
 }
