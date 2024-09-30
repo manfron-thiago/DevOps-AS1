@@ -14,19 +14,39 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # Enviar mensagem de sucesso ao Discord: Código baixado
+      - name: Code Checked Out
+        run: |
+          curl -H "Content-Type: application/json" -X POST -d "{\"content\": \"📥 CD: Código baixado com sucesso!\"}" https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
+
       # Configuração do Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
 
+      # Enviar mensagem de sucesso ao Discord: Node.js configurado
+      - name: Node.js Setup
+        run: |
+          curl -H "Content-Type: application/json" -X POST -d "{\"content\": \"🛠️ CD: Node.js configurado com sucesso!\"}" https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
+
       # Instalação das dependências
       - name: Install dependencies
         run: npm install
 
+      # Enviar mensagem de sucesso ao Discord: Dependências instaladas
+      - name: Dependencies Installed
+        run: |
+          curl -H "Content-Type: application/json" -X POST -d "{\"content\": \"📦 CD: Dependências instaladas com sucesso!\"}" https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
+
       # Build do projeto
       - name: Build project
         run: npm run build
+
+      # Enviar mensagem de sucesso ao Discord: Build concluído
+      - name: Build Completed
+        run: |
+          curl -H "Content-Type: application/json" -X POST -d "{\"content\": \"🚀 CD: Build concluído com sucesso!\"}" https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
 
       # Fazer o upload do build como artefato
       - name: Upload Build Artifact
@@ -35,7 +55,7 @@ jobs:
           name: react-build
           path: ./dist
 
-      # Enviar mensagem de sucesso ao Discord
-      - name: Send Success Message to Discord
+      # Enviar mensagem de sucesso ao Discord após o deploy
+      - name: Build and Deploy Successful
         run: |
-          curl -H "Content-Type: application/json" -X POST -d '{"content": "🚀 CD: Build e Deploy concluídos com sucesso!"}' https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
+          curl -H "Content-Type: application/json" -X POST -d "{\"content\": \"🎉 CD: Build e Deploy concluídos com sucesso!\"}" https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
