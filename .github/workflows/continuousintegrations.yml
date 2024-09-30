@@ -20,7 +20,7 @@ jobs:
       - name: Check if it's a merge
         id: check_merge
         run: |
-          if [[ "${{ github.event.head_commit.message }}" == *"Merge pull request"* ]]; then
+          if [[ "${{ github.event.pull_request.merged }}" == "true" ]]; then
             echo "::set-output name=merge::true"
           else
             echo "::set-output name=merge::false"
