@@ -16,25 +16,29 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Enviar mensagem de início ao Discord
+      # Enviar mensagem de início ao Discord se não for um merge
       - name: Send Start Message to Discord
+        if: github.event_name != 'pull_request' || (github.event_name == 'pull_request' && github.event.action != 'closed')
         run: |
           curl -H "Content-Type: application/json" -X POST -d '{"content": "🔨 CI: Iniciando o processo de build..."}' https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
 
       # Instalação das dependências
       - name: Install dependencies
+        if: github.event_name != 'pull_request' || (github.event_name == 'pull_request' && github.event.action != 'closed')
         run: |
           npm install
           curl -H "Content-Type: application/json" -X POST -d '{"content": "📦 CI: Dependências instaladas com sucesso!"}' https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
 
       # Executar linting
       - name: Run Linting
+        if: github.event_name != 'pull_request' || (github.event_name == 'pull_request' && github.event.action != 'closed')
         run: |
           npm run lint
           curl -H "Content-Type: application/json" -X POST -d '{"content": "✅ CI: Linting concluído! O código está limpo."}' https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
 
       # Build do projeto
       - name: Build project
+        if: github.event_name != 'pull_request' || (github.event_name == 'pull_request' && github.event.action != 'closed')
         run: |
           npm run build
           curl -H "Content-Type: application/json" -X POST -d '{"content": "🚀 CI: Build concluído com sucesso!"}' https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
