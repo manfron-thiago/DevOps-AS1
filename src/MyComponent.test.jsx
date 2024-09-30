@@ -1,11 +1,8 @@
-/* global test, expect */
-
-import React from 'react';
 import { render, screen } from '@testing-library/react';
-import MyComponent from './MyComponent'; // Ajuste o caminho conforme necessário
+import MyComponent from './MyComponent';
 
-test('renders MyComponent correctly', () => {
+test('renders learn react link', () => {
   render(<MyComponent />);
-  const element = screen.getByText(/Texto esperado/i); // Substitua pelo texto que você espera encontrar
-  expect(element).toBeInTheDocument();
+  const linkElement = screen.getByText(/learn react/i);
+  expect(linkElement).toBeInTheDocument();
 });
