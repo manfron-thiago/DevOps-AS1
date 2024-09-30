@@ -35,7 +35,7 @@ jobs:
           name: react-build
           path: ./dist
 
-      # Enviar alerta ao Discord para sucesso do CD
-      - name: Send Discord Alert (CD Build Sucesso)
+      # Enviar mensagem de sucesso ao Discord
+      - name: Send Success Message to Discord
         run: |
           curl -H "Content-Type: application/json" -X POST -d '{"content": "🚀 CD: Build e Deploy concluídos com sucesso!"}' https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
