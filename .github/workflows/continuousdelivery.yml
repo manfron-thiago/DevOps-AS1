@@ -39,6 +39,12 @@ jobs:
         run: |
           curl -H "Content-Type: application/json" -X POST -d "{\"content\": \"📦 CD: Dependências instaladas com sucesso!\"}" https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
 
+      # Executar testes unitários
+      - name: Run Tests
+        run: |
+          npm test -- --watchAll=false
+          curl -H "Content-Type: application/json" -X POST -d "{\"content\": \"🧪 CD: Testes executados com sucesso!\"}" https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
+
       # Build do projeto
       - name: Build project
         run: npm run build
