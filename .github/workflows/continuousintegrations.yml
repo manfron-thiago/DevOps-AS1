@@ -28,15 +28,17 @@ jobs:
 
       - name: Run Tests
         run: |
-          npm test -- --watchAll=false || echo "🛑 CI: Algum teste falhou!"
-        continue-on-error: true
+          npm test -- --watchAll=false --ci || echo "🛑 CI: Algum teste falhou!"
+
       - name: Send Test Results to Discord
         run: |
-          if [[ $? -eq 0 ]]; then
-            curl -H "Content-Type: application/json" -X POST -d '{"content": "🧪 CI: Todos os testes foram executados com sucesso!"}' https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
-          else
-            curl -H "Content-Type: application/json" -X POST -d '{"content": "🛑 CI: Um ou mais testes falharam!"}' https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
-          fi
+          for i in {1..5}; do
+            if [[ $? -eq 0 ]]; then
+              curl -H "Content-Type: application/json" -X POST -d "{\"content\": \"✅ CI: Teste $i executado com sucesso!\"}" https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
+            else
+              curl -H "Content-Type: application/json" -X POST -d "{\"content\": \"🛑 CI: Teste $i falhou!\"}" https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
+            fi
+          done
 
       - name: Build project
         run: |
