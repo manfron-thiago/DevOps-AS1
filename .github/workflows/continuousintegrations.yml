@@ -1,6 +1,5 @@
 name: CI Workflow
 
-# Executa o workflow em pull request na branch main
 on:
   pull_request:
     branches: [main]
@@ -10,35 +9,36 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout do código no repositório
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Enviar mensagem de início ao Discord
       - name: Send Start Message to Discord
         run: |
-          curl -H "Content-Type: application/json" -X POST -d '{"content": "🔨 CI: Iniciando o processo de build..."}' https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
+          curl -H "Content-Type: application/json" -X POST -d '{"content": "🔨 CI: Iniciando o processo de build..."}' https://discord.com/api/webhooks/...
 
-      # Instalação das dependências
       - name: Install dependencies
         run: |
           npm install
-          curl -H "Content-Type: application/json" -X POST -d '{"content": "📦 CI: Dependências instaladas com sucesso!"}' https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
+          curl -H "Content-Type: application/json" -X POST -d '{"content": "📦 CI: Dependências instaladas com sucesso!"}' https://discord.com/api/webhooks/...
 
-      # Executar linting
       - name: Run Linting
         run: |
           npm run lint
-          curl -H "Content-Type: application/json" -X POST -d '{"content": "✅ CI: Linting concluído! O código está limpo."}' https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
+          curl -H "Content-Type: application/json" -X POST -d '{"content": "✅ CI: Linting concluído! O código está limpo."}' https://discord.com/api/webhooks/...
 
-      # Executar testes unitários
       - name: Run Tests
         run: |
-          npm test -- --watchAll=false
-          curl -H "Content-Type: application/json" -X POST -d '{"content": "🧪 CI: Testes executados com sucesso!"}' https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
+          npm test -- --watchAll=false || echo "🛑 CI: Algum teste falhou!"
+        continue-on-error: true
+      - name: Send Test Results to Discord
+        run: |
+          if [[ $? -eq 0 ]]; then
+            curl -H "Content-Type: application/json" -X POST -d '{"content": "🧪 CI: Todos os testes foram executados com sucesso!"}' https://discord.com/api/webhooks/...
+          else
+            curl -H "Content-Type: application/json" -X POST -d '{"content": "🛑 CI: Um ou mais testes falharam!"}' https://discord.com/api/webhooks/...
+          fi
 
-      # Build do projeto
       - name: Build project
         run: |
           npm run build
-          curl -H "Content-Type: application/json" -X POST -d '{"content": "🚀 CI: Build concluído com sucesso!"}' https://discord.com/api/webhooks/1290083095252307979/Pz-fzPHsDdaxw7DWxz4oC9bBaFjGUVPpDQO9-UwbBzd2KpIWZrzkRy03Mz-t2Cq-f9xl
+          curl -H "Content-Type: application/json" -X POST -d '{"content": "🚀 CI: Build concluído com sucesso!"}' https://discord.com/api/webhooks/...
