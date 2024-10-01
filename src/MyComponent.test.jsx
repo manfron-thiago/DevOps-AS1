@@ -1,7 +1,6 @@
 /* eslint-disable no-undef */
 
 import { render, screen, fireEvent } from '@testing-library/react';
-import MyComponent from './MyComponent';
 import MyComponent from './MyComponent.jsx';
 
 
